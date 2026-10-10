@@ -130,6 +130,13 @@ export default function MyListingsPage() {
                 {/* Actions */}
                 <div className="flex items-center space-x-3 self-end md:self-center">
                   <Link
+                    href={`/resources/${item._id}/edit`}
+                    className="btn-woodwrights-outline px-4 py-2 text-[10px]"
+                  >
+                    Edit
+                  </Link>
+
+                  <Link
                     href="/requests/incoming"
                     className="btn-woodwrights-outline px-4 py-2 text-[10px]"
                   >
