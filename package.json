@@ -1,5 +1,5 @@
 {
-  "name": "reuse-campus",
+  "name": "y",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -20,8 +20,18 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13"
-  }
+    "tailwindcss": "^3.4.13",
+    "typescript": "7.0.2"
+  },
+  "description": "> Enterprise-grade full-stack platform for inter-departmental and peer-to-peer campus resource exchange, inventory lifecycle management, atomic custody reservations, and audited environmental impact analytics.",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC"
 }

@@ -23,6 +23,13 @@ export async function POST(request) {
         { status: 400 }
       );
     }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])/;
+    if (!passwordRegex.test(password)) {
+      return NextResponse.json(
+        { error: 'Password must contain at least one uppercase letter and one special character' },
+        { status: 400 }
+      );
+    }
 
     // Security rule: admin cannot be created via public registration
     if (role === 'admin') {
