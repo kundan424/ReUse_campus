@@ -44,16 +44,6 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/check-surplus"
-              className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors flex items-center gap-1.5 ${
-                isActive('/check-surplus') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
-              }`}
-            >
-              <span>Check Surplus</span>
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#4C5847]"></span>
-            </Link>
-
-            <Link
               href="/impact"
               className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
                 isActive('/impact') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
@@ -176,13 +166,6 @@ export default function Navbar() {
             className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
           >
             Catalogue
-          </Link>
-          <Link
-            href="/check-surplus"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
-          >
-            Check Surplus / Need Item
           </Link>
           <Link
             href="/impact"
