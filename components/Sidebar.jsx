@@ -14,20 +14,23 @@ export default function Sidebar() {
     toggleSidebar,
     isMobileOpen,
     closeMobileSidebar,
+    activeTab,
+    setActiveTab,
   } = useSidebar();
 
-  // "show only when a user is logged in"
   if (!user) {
     return null;
   }
 
-  const isActive = (path) => pathname === path;
+  const isDashboard = pathname === '/dashboard';
+  const isActiveRoute = (path) => pathname === path;
 
   const subnavItems = [
     {
-      name: 'Dashboard',
+      name: 'Overview',
+      tabKey: 'overview',
       href: '/dashboard',
-      badge: 'Overview',
+      badge: 'Hub',
       icon: (
         <svg
           className="w-4 h-4 flex-shrink-0"
@@ -46,7 +49,8 @@ export default function Sidebar() {
     },
     {
       name: 'My Requests',
-      href: '/requests/my-requests',
+      tabKey: 'requests',
+      href: '/dashboard?tab=requests',
       badge: 'Requisitions',
       icon: (
         <svg
@@ -66,7 +70,8 @@ export default function Sidebar() {
     },
     {
       name: 'Incoming Review',
-      href: '/requests/incoming',
+      tabKey: 'incoming',
+      href: '/dashboard?tab=incoming',
       badge: 'Review',
       icon: (
         <svg
@@ -86,7 +91,8 @@ export default function Sidebar() {
     },
     {
       name: 'My Inventory',
-      href: '/resources/my-listings',
+      tabKey: 'inventory',
+      href: '/dashboard?tab=inventory',
       badge: 'Listings',
       icon: (
         <svg
@@ -109,7 +115,8 @@ export default function Sidebar() {
   if (user.role === 'admin') {
     subnavItems.push({
       name: 'Governance',
-      href: '/admin',
+      tabKey: 'governance',
+      href: '/dashboard?tab=governance',
       badge: 'Admin',
       icon: (
         <svg
@@ -188,14 +195,14 @@ export default function Sidebar() {
   return (
     <>
       {/* ======================================================== */}
-      {/* 1. DESKTOP DOCKED SIDEBAR                                 */}
+      {/* 1. DESKTOP STICKY SIDEBAR (Pinned on Left)                */}
       {/* ======================================================== */}
       <aside
-        className={`hidden md:block flex-shrink-0 bg-[#FAF8F5] border-r border-[#E8E3DA] transition-all duration-300 z-30 ${
+        className={`hidden md:block flex-shrink-0 bg-[#FAF8F5] border-r border-[#E8E3DA] transition-all duration-300 z-30 sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto ${
           isOpen ? 'w-64 xl:w-72' : 'w-16'
         }`}
       >
-        <div className="sticky top-[100px] h-[calc(100vh-100px)] overflow-y-auto flex flex-col justify-between p-3.5 lg:p-4">
+        <div className="min-h-full flex flex-col justify-between p-3.5 lg:p-4">
           <div className="space-y-6">
             {/* User Profile Card */}
             {isOpen ? (
@@ -229,10 +236,10 @@ export default function Sidebar() {
                   </div>
                 </div>
 
-                {/* Primary Quick Action Button */}
-                <Link
-                  href="/resources/new"
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] text-[10px] tracking-[0.14em] uppercase font-semibold transition-all shadow-xs"
+                {/* Primary Quick Action Button -> Switches right content to 'new' */}
+                <button
+                  onClick={() => setActiveTab('new')}
+                  className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] text-[10px] tracking-[0.14em] uppercase font-semibold transition-all shadow-xs cursor-pointer"
                 >
                   <svg
                     className="w-3.5 h-3.5"
@@ -244,7 +251,7 @@ export default function Sidebar() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
                   <span>List Resource</span>
-                </Link>
+                </button>
               </div>
             ) : (
               /* Collapsed Avatar and Action */
@@ -255,10 +262,10 @@ export default function Sidebar() {
                 >
                   {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                 </div>
-                <Link
-                  href="/resources/new"
+                <button
+                  onClick={() => setActiveTab('new')}
                   title="List New Resource"
-                  className="w-9 h-9 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] flex items-center justify-center rounded-xs transition-colors"
+                  className="w-9 h-9 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] flex items-center justify-center rounded-xs transition-colors cursor-pointer"
                 >
                   <svg
                     className="w-4 h-4"
@@ -269,11 +276,11 @@ export default function Sidebar() {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
-                </Link>
+                </button>
               </div>
             )}
 
-            {/* Subnavigation Section */}
+            {/* Subnavigation Section -> Controls Right Content Area */}
             <div className="space-y-1.5">
               {isOpen && (
                 <div className="px-2 pb-1 text-[9px] tracking-[0.22em] uppercase text-[#8A8276] font-semibold">
@@ -282,13 +289,14 @@ export default function Sidebar() {
               )}
               <nav className="space-y-1">
                 {subnavItems.map((item) => {
-                  const active = isActive(item.href);
+                  const active = isDashboard ? activeTab === item.tabKey : false;
+
                   return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
+                    <button
+                      key={item.tabKey}
+                      onClick={() => setActiveTab(item.tabKey)}
                       title={!isOpen ? item.name : undefined}
-                      className={`flex items-center gap-3 px-3 py-2.5 text-[11px] tracking-[0.08em] uppercase font-medium transition-all ${
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 text-[11px] tracking-[0.08em] uppercase font-medium transition-all text-left cursor-pointer ${
                         isOpen ? 'rounded-xs' : 'justify-center rounded-xs px-2'
                       } ${
                         active
@@ -307,7 +315,7 @@ export default function Sidebar() {
                           )}
                         </div>
                       )}
-                    </Link>
+                    </button>
                   );
                 })}
               </nav>
@@ -322,7 +330,7 @@ export default function Sidebar() {
               )}
               <nav className="space-y-1">
                 {campusLinks.map((item) => {
-                  const active = isActive(item.href);
+                  const active = isActiveRoute(item.href);
                   return (
                     <Link
                       key={item.href}
@@ -347,11 +355,10 @@ export default function Sidebar() {
 
           {/* Sidebar Footer Controls */}
           <div className="pt-4 border-t border-[#E8E3DA] space-y-2">
-            {/* Sign Out */}
             <button
               onClick={logout}
               title={!isOpen ? 'Sign Out' : undefined}
-              className={`w-full flex items-center gap-3 px-3 py-2 text-[10px] tracking-[0.14em] uppercase text-[#7A746B] hover:text-[#B91C1C] hover:bg-[#FDF2F2] rounded-xs transition-colors ${
+              className={`w-full flex items-center gap-3 px-3 py-2 text-[10px] tracking-[0.14em] uppercase text-[#7A746B] hover:text-[#B91C1C] hover:bg-[#FDF2F2] rounded-xs transition-colors cursor-pointer ${
                 isOpen ? '' : 'justify-center px-2'
               }`}
             >
@@ -375,7 +382,7 @@ export default function Sidebar() {
             <button
               onClick={toggleSidebar}
               title={isOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
-              className={`w-full flex items-center gap-2 px-3 py-1.5 text-[9px] tracking-[0.18em] uppercase text-[#8A8276] hover:text-[#1C1B18] hover:bg-[#EDE7DE] rounded-xs transition-colors ${
+              className={`w-full flex items-center gap-2 px-3 py-1.5 text-[9px] tracking-[0.18em] uppercase text-[#8A8276] hover:text-[#1C1B18] hover:bg-[#EDE7DE] rounded-xs transition-colors cursor-pointer ${
                 isOpen ? 'justify-between' : 'justify-center px-2'
               }`}
             >
@@ -401,29 +408,23 @@ export default function Sidebar() {
       {/* ======================================================== */}
       {isMobileOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          {/* Backdrop Overlay */}
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={closeMobileSidebar}
             aria-hidden="true"
           />
 
-          {/* Drawer Panel */}
           <div className="relative w-72 sm:w-80 max-w-[85vw] bg-[#FAF8F5] border-r border-[#E8E3DA] h-full shadow-2xl flex flex-col justify-between p-5 overflow-y-auto z-10">
             <div className="space-y-6">
-              {/* Drawer Header */}
               <div className="flex items-center justify-between pb-3 border-b border-[#E8E3DA]">
                 <div>
                   <span className="font-editorial text-xl font-medium tracking-tight text-[#1C1B18]">
                     ReUse Campus
                   </span>
-                  {/* <div className="text-[9px] tracking-[0.25em] uppercase text-[#8A8276] -mt-1 font-sans">
-                    Member Workspace
-                  </div> */}
                 </div>
                 <button
                   onClick={closeMobileSidebar}
-                  className="p-1.5 text-[#1C1B18] hover:bg-[#E8E3DA] rounded-xs"
+                  className="p-1.5 text-[#1C1B18] hover:bg-[#E8E3DA] rounded-xs cursor-pointer"
                   aria-label="Close Sidebar"
                 >
                   <svg
@@ -438,7 +439,6 @@ export default function Sidebar() {
                 </button>
               </div>
 
-              {/* User Profile Card */}
               <div className="p-3.5 bg-[#F4EFEA] border border-[#E8E3DA] space-y-3">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-full bg-[#1C1B18] text-[#FAF8F5] font-editorial text-lg flex items-center justify-center flex-shrink-0">
@@ -454,10 +454,9 @@ export default function Sidebar() {
                   </div>
                 </div>
 
-                <Link
-                  href="/resources/new"
-                  onClick={closeMobileSidebar}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] text-[11px] tracking-[0.14em] uppercase font-semibold transition-all shadow-xs"
+                <button
+                  onClick={() => setActiveTab('new')}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#1C1B18] hover:bg-[#38342E] text-[#FAF8F5] text-[11px] tracking-[0.14em] uppercase font-semibold transition-all shadow-xs cursor-pointer"
                 >
                   <svg
                     className="w-4 h-4"
@@ -469,7 +468,7 @@ export default function Sidebar() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
                   <span>List New Resource</span>
-                </Link>
+                </button>
               </div>
 
               {/* Subnavigation Section */}
@@ -479,13 +478,13 @@ export default function Sidebar() {
                 </div>
                 <nav className="space-y-1">
                   {subnavItems.map((item) => {
-                    const active = isActive(item.href);
+                    const active = isDashboard && activeTab === item.tabKey;
+
                     return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={closeMobileSidebar}
-                        className={`flex items-center gap-3 px-3 py-2.5 text-[11px] tracking-[0.1em] uppercase font-medium rounded-xs transition-all ${
+                      <button
+                        key={item.tabKey}
+                        onClick={() => setActiveTab(item.tabKey)}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-[11px] tracking-[0.1em] uppercase font-medium rounded-xs transition-all text-left cursor-pointer ${
                           active
                             ? 'bg-[#1C1B18] text-[#FAF8F5]'
                             : 'text-[#58534C] hover:text-[#1C1B18] hover:bg-[#EDE7DE]'
@@ -506,7 +505,7 @@ export default function Sidebar() {
                             {item.badge}
                           </span>
                         </div>
-                      </Link>
+                      </button>
                     );
                   })}
                 </nav>
@@ -519,7 +518,7 @@ export default function Sidebar() {
                 </div>
                 <nav className="space-y-1">
                   {campusLinks.map((item) => {
-                    const active = isActive(item.href);
+                    const active = isActiveRoute(item.href);
                     return (
                       <Link
                         key={item.href}
@@ -547,7 +546,7 @@ export default function Sidebar() {
                   closeMobileSidebar();
                   logout();
                 }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 border border-[#E8E3DA] hover:border-[#B91C1C] text-[11px] tracking-[0.14em] uppercase font-medium text-[#7A746B] hover:text-[#B91C1C] transition-colors rounded-xs"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 border border-[#E8E3DA] hover:border-[#B91C1C] text-[11px] tracking-[0.14em] uppercase font-medium text-[#7A746B] hover:text-[#B91C1C] transition-colors rounded-xs cursor-pointer"
               >
                 <svg
                   className="w-4 h-4"
@@ -564,9 +563,6 @@ export default function Sidebar() {
                 </svg>
                 <span>Sign Out</span>
               </button>
-              <div className="text-center text-[9px] tracking-[0.25em] uppercase text-[#8A8276]">
-                Institutional Circularity
-              </div>
             </div>
           </div>
         </div>
