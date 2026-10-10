@@ -3,6 +3,8 @@ import connectDB from '@/lib/db';
 import Transfer from '@/lib/models/Transfer';
 import { getAuthUser } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const user = await getAuthUser();

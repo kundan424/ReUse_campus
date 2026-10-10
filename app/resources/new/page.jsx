@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CAMPUS_CATEGORIES, CONDITIONS } from '@/lib/categories';
@@ -102,6 +103,14 @@ export default function NewResourcePage() {
           Register unused textbooks, electronics, laboratory apparatus, or furniture. Every listing offers an
           opportunity to prevent avoidable campus procurement.
         </p>
+        <div className="pt-2">
+          <Link
+            href="/resources/bulk-import"
+            className="inline-flex items-center text-[12px] text-[#8F5338] hover:text-[#5E2B15] font-medium underline underline-offset-4"
+          >
+            📋 Have a department spreadsheet of 10+ surplus items? Use our Bulk CSV Importer →
+          </Link>
+        </div>
       </div>
 
       {error && (
