@@ -60,15 +60,21 @@ export default function HomePage() {
           </p>
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/check-surplus"
+              className="btn-woodwrights-primary px-7 py-3.5 inline-flex items-center text-center gap-2 shadow-wood hover:shadow-wood-hover"
+            >
+              <span>🔍 Need An Item? Check Campus Surplus</span>
+            </Link>
             <a
               href="#catalogue"
-              className="btn-woodwrights-primary px-8 py-3.5 inline-flex items-center text-center"
+              className="btn-woodwrights-outline px-7 py-3.5 inline-flex items-center text-center"
             >
               Browse Catalogue
             </a>
             <Link
               href="/resources/new"
-              className="btn-woodwrights-outline px-8 py-3.5 inline-flex items-center text-center"
+              className="btn-woodwrights-outline px-7 py-3.5 inline-flex items-center text-center"
             >
               + List Available Item
             </Link>
