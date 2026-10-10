@@ -9,17 +9,17 @@ export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
 
-  const [role, setRole] = useState('student'); // 'student' | 'department'
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [departmentName, setDepartmentName] = useState('');
   const [collegeId, setCollegeId] = useState('');
   const [phone, setPhone] = useState('');
-const [passwordError,setPasswordError]= useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-const [phoneError,setPhoneError]=useState('');
+  const [phoneError, setPhoneError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -30,13 +30,13 @@ const [phoneError,setPhoneError]=useState('');
         name,
         email,
         password,
-        role,
-        departmentName: role === 'department' ? departmentName : '',
-        collegeId: role === 'student' ? collegeId : '',
+        role: 'user',
+        departmentName,
+        collegeId,
         phone,
       });
 
-      router.push('/');
+      router.push('/dashboard');
     } catch (err) {
       setError(err.message || 'Registration failed');
     } finally {
@@ -55,7 +55,7 @@ const [phoneError,setPhoneError]=useState('');
           Create Campus Account
         </h1>
         <p className="text-[13px] text-[#6E675D]">
-          Register as a student or college department representative
+          Register to list, discover, and exchange campus resources
         </p>
       </div>
 
@@ -66,37 +66,6 @@ const [phoneError,setPhoneError]=useState('');
       )}
 
       <div className="bg-white border border-[#E8E3DA] p-8 shadow-wood space-y-6">
-        {/* Role Toggle */}
-        <div className="space-y-2">
-          <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium">
-            Account Type
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => setRole('student')}
-              className={`p-3 text-center border text-[12px] font-semibold tracking-wider uppercase transition-colors ${
-                role === 'student'
-                  ? 'border-[#1C1B18] bg-[#1C1B18] text-[#FAF8F5]'
-                  : 'border-[#E8E3DA] bg-white text-[#544F46] hover:bg-[#FAF8F5]'
-              }`}
-            >
-              Student
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole('department')}
-              className={`p-3 text-center border text-[12px] font-semibold tracking-wider uppercase transition-colors ${
-                role === 'department'
-                  ? 'border-[#1C1B18] bg-[#1C1B18] text-[#FAF8F5]'
-                  : 'border-[#E8E3DA] bg-white text-[#544F46] hover:bg-[#FAF8F5]'
-              }`}
-            >
-              Department Rep
-            </button>
-          </div>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">
@@ -155,38 +124,31 @@ const [phoneError,setPhoneError]=useState('');
             )}
           </div>
 
-          {/* Conditional field for department */}
-          {role === 'department' && (
-            <div>
-              <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">
-                College Department / Facility Name *
-              </label>
-              <input
-                type="text"
-                value={departmentName}
-                onChange={(e) => setDepartmentName(e.target.value)}
-                placeholder="e.g. Computer Science & Engineering, Physics Lab, SAC"
-                required={role === 'department'}
-                className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
-              />
-            </div>
-          )}
+          <div>
+            <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">
+              Department / Facility Name (Optional)
+            </label>
+            <input
+              type="text"
+              value={departmentName}
+              onChange={(e) => setDepartmentName(e.target.value)}
+              placeholder="e.g. Computer Science & Engineering, Physics Lab, SAC"
+              className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
+            />
+          </div>
 
-          {/* Conditional field for student */}
-          {role === 'student' && (
-            <div>
-              <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">
-                Roll / Student Enrollment Number
-              </label>
-              <input
-                type="text"
-                value={collegeId}
-                onChange={(e) => setCollegeId(e.target.value)}
-                placeholder="e.g. 2024CSE045"
-                className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
-              />
-            </div>
-          )}
+          <div>
+            <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">
+              Roll / Student Enrollment Number (Optional)
+            </label>
+            <input
+              type="text"
+              value={collegeId}
+              onChange={(e) => setCollegeId(e.target.value)}
+              placeholder="e.g. 2024CSE045"
+              className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
+            />
+          </div>
 
           <div>
             <label className="block text-[11px] tracking-[0.14em] uppercase text-[#544F46] font-medium mb-1">

@@ -152,9 +152,7 @@ export default function MyRequestsPage() {
                       </div>
                       <div>
                         <strong>Custodian:</strong> {resItem?.owner?.name} (
-                        {resItem?.owner?.role === 'department'
-                          ? resItem?.owner?.departmentName || 'Dept'
-                          : 'Student'}
+                        {resItem?.owner?.departmentName || 'Campus Member'}
                         ) {resItem?.owner?.phone && `• Tel: ${resItem?.owner?.phone}`}
                       </div>
                     </div>

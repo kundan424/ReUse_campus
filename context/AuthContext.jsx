@@ -101,7 +101,14 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    return {
+      user: null,
+      loading: false,
+      login: async () => {},
+      register: async () => {},
+      logout: async () => {},
+      refreshUser: async () => {},
+    };
   }
   return context;
 }
