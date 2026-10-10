@@ -23,7 +23,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
-          <Link href="/" className="flex flex-col group">
+          <Link href={user ? '/dashboard' : '/'} className="flex flex-col group">
             <span className="font-editorial text-2xl sm:text-3xl font-medium tracking-tight text-[#1C1B18] group-hover:opacity-80 transition-opacity">
               ReUse Campus
             </span>
@@ -54,6 +54,15 @@ export default function Navbar() {
 
             {user && (
               <>
+                <Link
+                  href="/dashboard"
+                  className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
+                    isActive('/dashboard') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+
                 <Link
                   href="/requests/my-requests"
                   className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
@@ -112,7 +121,11 @@ export default function Navbar() {
               <div className="flex items-center space-x-4">
                 <Link
                   href="/resources/new"
-                  className="btn-woodwrights-primary px-4 py-2.5 inline-flex items-center justify-center"
+                  className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
+                    isActive('/resources/new')
+                      ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1'
+                      : 'text-[#6B655C] hover:text-[#1C1B18]'
+                  }`}
                 >
                   List Resource
                 </Link>
@@ -189,6 +202,13 @@ export default function Navbar() {
           {user ? (
             <>
               <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
+              >
+                Dashboard
+              </Link>
+              <Link
                 href="/requests/my-requests"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
@@ -219,7 +239,7 @@ export default function Navbar() {
               <Link
                 href="/resources/new"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block btn-woodwrights-primary text-center py-2.5 mt-2"
+                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
               >
                 List Resource
               </Link>

@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { user, register } = useAuth();
 
   const [role, setRole] = useState('student'); // 'student' | 'department'
   const [name, setName] = useState('');
@@ -16,10 +16,16 @@ export default function RegisterPage() {
   const [departmentName, setDepartmentName] = useState('');
   const [collegeId, setCollegeId] = useState('');
   const [phone, setPhone] = useState('');
-const [passwordError,setPasswordError]= useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-const [phoneError,setPhoneError]=useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -36,7 +42,7 @@ const [phoneError,setPhoneError]=useState('');
         phone,
       });
 
-      router.push('/');
+      router.push('/dashboard');
     } catch (err) {
       setError(err.message || 'Registration failed');
     } finally {
