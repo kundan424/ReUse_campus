@@ -57,9 +57,17 @@ export default function MyListingsPage() {
           </p>
         </div>
 
-        <Link href="/resources/new" className="btn-woodwrights-primary px-6 py-3 text-center">
-          + Add New Listing
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/resources/bulk-import"
+            className="btn-woodwrights-outline px-5 py-3 text-center text-[11px]"
+          >
+            Bulk CSV Import ↓
+          </Link>
+          <Link href="/resources/new" className="btn-woodwrights-primary px-6 py-3 text-center text-[11px]">
+            + Add New Listing
+          </Link>
+        </div>
       </div>
 
       {loading ? (

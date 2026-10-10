@@ -90,6 +90,17 @@ export default function Navbar() {
                 >
                   My Inventory
                 </Link>
+
+                {(user?.role === 'department' || user?.role === 'admin') && (
+                  <Link
+                    href="/resources/bulk-import"
+                    className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
+                      isActive('/resources/bulk-import') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
+                    }`}
+                  >
+                    Bulk Import
+                  </Link>
+                )}
               </>
             )}
 
@@ -214,6 +225,13 @@ export default function Navbar() {
                 className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
               >
                 My Inventory
+              </Link>
+              <Link
+                href="/resources/bulk-import"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
+              >
+                Bulk CSV Import
               </Link>
               <Link
                 href="/resources/new"
