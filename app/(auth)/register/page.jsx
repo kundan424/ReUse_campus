@@ -16,10 +16,10 @@ export default function RegisterPage() {
   const [departmentName, setDepartmentName] = useState('');
   const [collegeId, setCollegeId] = useState('');
   const [phone, setPhone] = useState('');
-
+const [passwordError,setPasswordError]= useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+const [phoneError,setPhoneError]=useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -133,11 +133,26 @@ export default function RegisterPage() {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                // Validate password on each change
+                const pwd = e.target.value;
+                const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}$/;
+                if (pwd.length === 0) {
+                  setPasswordError('');
+                } else if (!regex.test(pwd)) {
+                  setPasswordError('Password must be at least 6 characters, include an uppercase letter and a special character');
+                } else {
+                  setPasswordError('');
+                }
+              }}
               placeholder="••••••••"
               required
               className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
             />
+            {passwordError && (
+              <p className="text-xs text-red-600 mt-1">{passwordError}</p>
+            )}
           </div>
 
           {/* Conditional field for department */}
@@ -180,10 +195,25 @@ export default function RegisterPage() {
             <input
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              maxLength={10}
+              onChange={(e) => {
+                setPhone(e.target.value);
+                const ph = e.target.value.replace(/\D/g, ''); // strip non-digits
+                const regex = /^[6-9]\d{9}$/;
+                if (ph.length === 0) {
+                  setPhoneError('');
+                } else if (!regex.test(ph)) {
+                  setPhoneError('Enter a valid 10‑digit Indian mobile number starting with 6‑9');
+                } else {
+                  setPhoneError('');
+                }
+              }}
               placeholder="+91 98765 43210"
               className="w-full bg-[#FAF8F5] border border-[#E8E3DA] px-4 py-3 text-[14px] text-[#1C1B18] focus:outline-none focus:border-[#1C1B18]"
             />
+            {phoneError && (
+              <p className="text-xs text-red-600 mt-1">{phoneError}</p>
+            )}
           </div>
 
           <div className="pt-4">
