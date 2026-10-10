@@ -225,12 +225,20 @@ export default function ResourceDetailsPage() {
                 <p className="text-[12px] text-[#696256]">
                   Review applicant requests and coordinate handovers in your Incoming Review portal.
                 </p>
-                <Link
-                  href="/requests/incoming"
-                  className="btn-woodwrights-outline w-full py-2.5 text-center block"
-                >
-                  Go to Incoming Review →
-                </Link>
+                <div className="pt-2 flex items-center space-x-2">
+                  <Link
+                    href={`/resources/${resource._id}/edit`}
+                    className="btn-woodwrights-primary flex-1 py-2.5 text-center block text-[11px]"
+                  >
+                    Edit Listing Details
+                  </Link>
+                  <Link
+                    href="/requests/incoming"
+                    className="btn-woodwrights-outline flex-1 py-2.5 text-center block text-[11px]"
+                  >
+                    Incoming Review →
+                  </Link>
+                </div>
               </div>
             ) : canRequest ? (
               <button

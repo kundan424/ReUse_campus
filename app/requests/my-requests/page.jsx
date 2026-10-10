@@ -4,10 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import StatusBadge from '@/components/StatusBadge';
+import HandoverSlipModal from '@/components/HandoverSlipModal';
 
 export default function MyRequestsPage() {
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [activeSlipReq, setActiveSlipReq] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
   const [message, setMessage] = useState('');
@@ -67,6 +70,31 @@ export default function MyRequestsPage() {
     }
   };
 
+  const counts = {
+    all: requests.length,
+    pending: requests.filter((r) => r.status === 'pending').length,
+    approved: requests.filter((r) => ['approved', 'ready_for_pickup'].includes(r.status)).length,
+    completed: requests.filter((r) => r.status === 'completed').length,
+    closed: requests.filter((r) => ['rejected', 'cancelled'].includes(r.status)).length,
+  };
+
+  const filteredRequests = requests.filter((req) => {
+    if (statusFilter === 'all') return true;
+    if (statusFilter === 'pending') return req.status === 'pending';
+    if (statusFilter === 'approved') return ['approved', 'ready_for_pickup'].includes(req.status);
+    if (statusFilter === 'completed') return req.status === 'completed';
+    if (statusFilter === 'closed') return ['rejected', 'cancelled'].includes(req.status);
+    return true;
+  });
+
+  const tabs = [
+    { id: 'all', label: 'All Requests' },
+    { id: 'pending', label: 'Pending Review' },
+    { id: 'approved', label: 'Approved / Handover' },
+    { id: 'completed', label: 'Completed' },
+    { id: 'closed', label: 'Declined / Cancelled' },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-10">
       {/* Header */}
@@ -104,15 +132,51 @@ export default function MyRequestsPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {requests.map((req) => {
-            const resItem = req.resource;
-            const transfer = req.transfer;
-            const isApproved = req.status === 'approved' || req.status === 'ready_for_pickup';
-            const isCompleted = req.status === 'completed';
-            const hasReceiverConfirmed = transfer?.receiverConfirmedAt;
-            const hasGiverConfirmed = transfer?.giverConfirmedAt;
+          {/* Status Filter Tabs */}
+          <div className="flex flex-wrap items-center gap-2 border-b border-[#E8E3DA] pb-4">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setStatusFilter(tab.id)}
+                className={`px-4 py-2 text-[11px] tracking-[0.14em] uppercase font-semibold transition-all flex items-center space-x-2 border ${
+                  statusFilter === tab.id
+                    ? 'bg-[#1C1B18] text-[#FAF8F5] border-[#1C1B18]'
+                    : 'bg-white text-[#6B655C] border-[#E8E3DA] hover:border-[#1C1B18] hover:text-[#1C1B18]'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[10px] ${
+                    statusFilter === tab.id
+                      ? 'bg-[#38342E] text-white'
+                      : 'bg-[#FAF8F5] text-[#8A8276]'
+                  }`}
+                >
+                  {counts[tab.id] || 0}
+                </span>
+              </button>
+            ))}
+          </div>
 
-            return (
+          {filteredRequests.length === 0 ? (
+            <div className="py-16 text-center bg-white border border-[#E8E3DA] space-y-2 p-8">
+              <h4 className="font-editorial text-2xl text-[#1C1B18]">No requests in this category</h4>
+              <p className="text-[13px] text-[#7A746B]">
+                There are no requests matching the selected status filter.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {filteredRequests.map((req) => {
+                const resItem = req.resource;
+                const transfer = req.transfer;
+                const isApproved = req.status === 'approved' || req.status === 'ready_for_pickup';
+                const isCompleted = req.status === 'completed';
+                const hasReceiverConfirmed = transfer?.receiverConfirmedAt;
+                const hasGiverConfirmed = transfer?.giverConfirmedAt;
+
+                return (
               <div
                 key={req._id}
                 className="bg-white border border-[#E8E3DA] p-6 lg:p-8 space-y-6 hover:shadow-wood transition-shadow"
@@ -222,6 +286,16 @@ export default function MyRequestsPage() {
                       </div>
                     )}
 
+                    {(isApproved || isCompleted) && (
+                      <button
+                        onClick={() => setActiveSlipReq(req)}
+                        type="button"
+                        className="btn-woodwrights-outline w-full py-2 text-center text-[11px] tracking-wider uppercase flex items-center justify-center space-x-1.5 hover:border-[#1C1B18] transition-colors"
+                      >
+                        <span>📄 View Handover Pass</span>
+                      </button>
+                    )}
+
                     {['pending', 'approved'].includes(req.status) && !hasReceiverConfirmed && (
                       <button
                         onClick={() => handleCancelRequest(req._id)}
@@ -239,5 +313,14 @@ export default function MyRequestsPage() {
         </div>
       )}
     </div>
-  );
+  )}
+
+  {activeSlipReq && (
+    <HandoverSlipModal
+      req={activeSlipReq}
+      onClose={() => setActiveSlipReq(null)}
+    />
+  )}
+</div>
+);
 }
