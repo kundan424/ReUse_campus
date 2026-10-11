@@ -212,13 +212,6 @@ export default function Navbar() {
             Catalogue
           </Link>
           <Link
-            href="/check-surplus"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
-          >
-            Check Surplus / Need Item
-          </Link>
-          <Link
             href="/impact"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
@@ -246,6 +239,13 @@ export default function Navbar() {
                 <span>→</span>
               </button>
 
+              <Link
+                href="/resources/bulk-import"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
+              >
+                Bulk CSV Import
+              </Link>
               <Link
                 href="/resources/new"
                 onClick={() => setMobileMenuOpen(false)}

@@ -45,7 +45,7 @@ export async function PUT(request, { params }) {
     }
 
     const body = await request.json();
-    const { title, description, category, subCategory, condition, location, pickupInstructions, imageUrl } = body;
+    const { title, description, category, subCategory, quantity, condition, location, pickupInstructions, imageUrl } = body;
 
     if (title) resource.title = title.trim();
     if (description) resource.description = description.trim();
@@ -56,6 +56,19 @@ export async function PUT(request, { params }) {
     if (pickupInstructions) resource.pickupInstructions = pickupInstructions.trim();
     if (imageUrl !== undefined) resource.imageUrl = imageUrl.trim();
 
+    if (quantity !== undefined) {
+      const numQty = parseInt(quantity, 10);
+      if (isNaN(numQty) || numQty < 1 || numQty > 10000) {
+        return NextResponse.json(
+          { error: 'Quantity must be a valid integer between 1 and 10,000' },
+          { status: 400 }
+        );
+      }
+      const qtyDiff = numQty - resource.quantity;
+      resource.quantity = numQty;
+      resource.availableQuantity = Math.max(0, resource.availableQuantity + qtyDiff);
+    }
+
     await resource.save();
 
     return NextResponse.json({
@@ -65,6 +78,10 @@ export async function PUT(request, { params }) {
   } catch (error) {
     return NextResponse.json({ error: error.message || 'Failed to update resource' }, { status: 500 });
   }
+}
+
+export async function PATCH(request, context) {
+  return PUT(request, context);
 }
 
 export async function DELETE(request, { params }) {

@@ -18,6 +18,7 @@ The system enforces an explicit environmental accounting principle: **a resource
 * **🔒 Concurrency-Safe Atomic Reservations:** Optimistic condition checking and atomic MongoDB decrements prevent race conditions and inventory double-allocations.
 * **🤝 Two-Party Transfer Verification:** Strict custody protocol requiring mutual, independent digital confirmation from both donor and recipient before a transfer is finalized.
 * **🌱 Empirical Impact Engine:** Differentiates directly measured activity from modeled environmental metrics (avoided procurement costs, diverted landfill mass, and prevented $CO_2e$ emissions via LCA benchmarks).
+* **📊 Automated Department CSV / Excel Bulk Importer:** 1-click batch ingestion of lab surplus inventories with downloadable standardized template, live client-side validation, error reporting, and atomic batch database registration.
 * **🛡️ Role-Based Access Control (RBAC):** Tiered authorization for Students, Department Representatives, and Institutional Administrators. Administrator provisioning is restricted to secure CLI automation.
 * **🎨 Studio Almond / Woodwrights Design System:** Editorial aesthetic built on warm neutral tones, Cormorant Garamond serif headers, Plus Jakarta Sans grotesque typography, and architectural hairline dividers (zero playful/childish icons).
 
