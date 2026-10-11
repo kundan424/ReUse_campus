@@ -64,7 +64,7 @@ export default function ResourceCard({ resource }) {
               📍 {resource.location}
             </span>
             <span className="tracking-[0.1em] uppercase text-[9px] text-[#9E978C] font-semibold whitespace-nowrap pl-2">
-              {resource.ownerRole === 'department' ? 'Dept Surplus' : 'Student'}
+              {resource.owner?.departmentName || 'Campus Member'}
             </span>
           </div>
 

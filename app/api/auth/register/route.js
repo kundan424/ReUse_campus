@@ -39,14 +39,7 @@ export async function POST(request) {
       );
     }
 
-    const assignedRole = role === 'department' ? 'department' : 'student';
-
-    if (assignedRole === 'department' && !departmentName) {
-      return NextResponse.json(
-        { error: 'Department name is required for department representative accounts.' },
-        { status: 400 }
-      );
-    }
+    const assignedRole = 'user';
 
     const normalizedEmail = email.toLowerCase().trim();
     const existing = await User.findOne({ email: normalizedEmail });

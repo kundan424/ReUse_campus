@@ -207,9 +207,9 @@ export default function ResourceDetailsPage() {
               <div className="text-[13px] text-[#1C1B18]">
                 <div className="font-medium">{resource.owner?.name}</div>
                 <div className="text-[11px] text-[#7A746B]">
-                  {resource.owner?.role === 'department'
-                    ? `${resource.owner?.departmentName || 'Department'} (Institutional Surplus)`
-                    : 'Registered Student Listing'}
+                  {resource.owner?.departmentName
+                    ? `${resource.owner?.departmentName} (Institutional Surplus)`
+                    : 'Campus Member Listing'}
                 </div>
               </div>
             </div>

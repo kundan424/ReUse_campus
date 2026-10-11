@@ -241,7 +241,7 @@ export default function IncomingRequestsPage() {
                         Applicant Information
                       </div>
                       <div className="font-medium text-[#1C1B18]">
-                        {requester?.name} ({requester?.role === 'department' ? requester?.departmentName : 'Student'}
+                        {requester?.name} ({requester?.departmentName || 'Campus Member'}
                         {requester?.collegeId && ` • ID: ${requester?.collegeId}`})
                       </div>
                       <div className="text-[12px] text-[#6E675D]">

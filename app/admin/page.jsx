@@ -146,8 +146,6 @@ export default function AdminPage() {
                       className={`inline-block px-2 py-0.5 text-[10px] tracking-wider uppercase font-semibold border ${
                         u.role === 'admin'
                           ? 'bg-[#FAF0E6] text-[#8F5338] border-[#E8D0C0]'
-                          : u.role === 'department'
-                          ? 'bg-[#EBF2EB] text-[#2F442F] border-[#D1E0D1]'
                           : 'bg-[#F4F1EA] text-[#4A453D] border-[#DDD5C7]'
                       }`}
                     >
@@ -155,7 +153,7 @@ export default function AdminPage() {
                     </span>
                   </td>
                   <td className="p-4 text-[#6E675D]">
-                    {u.role === 'department' ? u.departmentName : u.collegeId || 'General'}
+                    {u.departmentName || u.collegeId || 'General'}
                   </td>
                   <td className="p-4 text-center">
                     <span
