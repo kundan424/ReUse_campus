@@ -104,7 +104,7 @@ export default function LoginPage() {
         </form>
 
         <div className="pt-4 border-t border-[#E8E3DA] text-center text-[12px] text-[#7A746B]">
-          New student or department representative?{' '}
+          New to campus?{' '}
           <Link href="/register" className="text-[#1C1B18] font-semibold underline underline-offset-4">
             Register Here
           </Link>
@@ -116,22 +116,14 @@ export default function LoginPage() {
         <div className="text-[10px] tracking-[0.2em] uppercase text-[#8A8276] font-semibold text-center">
           Evaluator Quick-Select (Password: Campus@123)
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
           <button
             type="button"
             onClick={() => handleQuickDemo('priya.student@campus.edu')}
             className="p-2 bg-white border border-[#E8E3DA] text-[11px] text-[#332F2A] hover:border-[#1C1B18] text-center transition-colors"
           >
-            <div className="font-semibold">Student</div>
+            <div className="font-semibold">User</div>
             <div className="text-[9px] text-[#8A8276]">Priya Sundaram</div>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleQuickDemo('cse.lab@campus.edu')}
-            className="p-2 bg-white border border-[#E8E3DA] text-[11px] text-[#332F2A] hover:border-[#1C1B18] text-center transition-colors"
-          >
-            <div className="font-semibold">Department</div>
-            <div className="text-[9px] text-[#8A8276]">CSE Lab Rep</div>
           </button>
           <button
             type="button"

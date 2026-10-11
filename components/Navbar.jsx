@@ -4,16 +4,19 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useSidebar } from '@/context/SidebarContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { isOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path) => pathname === path;
+  const isLandingPage = pathname === '/';
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-md hairline-bottom">
+    <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md hairline-bottom">
       {/* Top Announcement Bar */}
       <div className="bg-[#1C1B18] text-[#FAF8F5] text-[10px] tracking-[0.22em] uppercase py-2 px-4 text-center font-medium">
         A Circular Campus Exchange — Minimizing Academic Resource Waste
@@ -33,20 +36,36 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8">
+          {/* <nav className="hidden md:flex items-center space-x-7">
             <Link
-              href="/"
+              href="/catalogue"
               className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
-                isActive('/') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
+                isActive('/catalogue')
+                  ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1 font-semibold'
+                  : 'text-[#6B655C] hover:text-[#1C1B18]'
               }`}
             >
               Catalogue
             </Link>
 
             <Link
+              href="/check-surplus"
+              className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors flex items-center gap-1.5 ${
+                isActive('/check-surplus')
+                  ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1 font-semibold'
+                  : 'text-[#6B655C] hover:text-[#1C1B18]'
+              }`}
+            >
+              <span>Check Surplus</span>
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#4C5847]"></span>
+            </Link>
+
+            <Link
               href="/impact"
               className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors ${
-                isActive('/impact') ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1' : 'text-[#6B655C] hover:text-[#1C1B18]'
+                isActive('/impact')
+                  ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1 font-semibold'
+                  : 'text-[#6B655C] hover:text-[#1C1B18]'
               }`}
             >
               Impact Ledger
@@ -105,18 +124,21 @@ export default function Navbar() {
 
             {user?.role === 'admin' && (
               <Link
-                href="/admin"
-                className={`text-[11px] tracking-[0.16em] uppercase font-semibold text-[#8F5338] hover:text-[#1C1B18] transition-colors ${
-                  isActive('/admin') ? 'border-b border-[#8F5338] pb-1' : ''
+                href="/dashboard"
+                className={`text-[11px] tracking-[0.16em] uppercase font-medium transition-colors flex items-center gap-1.5 ${
+                  isActive('/dashboard')
+                    ? 'text-[#1C1B18] border-b border-[#1C1B18] pb-1 font-semibold'
+                    : 'text-[#6B655C] hover:text-[#1C1B18]'
                 }`}
               >
-                Governance
+                <span>Dashboard</span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#8F5338]"></span>
               </Link>
             )}
-          </nav>
+          </nav> */}
 
           {/* Action Area: Post Resource / Account Controls */}
-          <div className="hidden md:flex items-center space-x-6">
+          {/* <div className="hidden md:flex items-center space-x-5">
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link
@@ -127,23 +149,32 @@ export default function Navbar() {
                       : 'text-[#6B655C] hover:text-[#1C1B18]'
                   }`}
                 >
-                  List Resource
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>List Resource</span>
                 </Link>
 
                 <div className="h-6 w-[1px] bg-[#E8E3DA]"></div>
 
-                <div className="text-right">
-                  <div className="text-[12px] font-medium text-[#1C1B18] leading-tight">
+                <Link href="/dashboard" className="text-right group">
+                  <div className="text-[12px] font-medium text-[#1C1B18] group-hover:underline leading-tight">
                     {user.name}
                   </div>
                   <div className="text-[9px] tracking-[0.14em] uppercase text-[#8A8276]">
-                    {user.role === 'department' ? user.departmentName || 'Department' : user.role}
+                    {user.departmentName || user.collegeId || user.role}
                   </div>
-                </div>
+                </Link>
 
                 <button
                   onClick={logout}
-                  className="text-[10px] tracking-[0.14em] uppercase text-[#8A8276] hover:text-[#1C1B18] transition-colors underline underline-offset-4"
+                  className="text-[10px] tracking-[0.14em] uppercase text-[#8A8276] hover:text-[#B91C1C] transition-colors underline underline-offset-4"
                 >
                   Exit
                 </button>
@@ -164,11 +195,30 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
-          </div>
+          </div> */}
 
-          {/* Mobile hamburger menu toggle */}
-          <div className="md:hidden flex items-center">
-            <button
+          {/* Mobile Navigation Controls */}
+          <div className="md:hidden flex items-center space-x-2">
+            {user && !isLandingPage && (
+              <button
+                onClick={toggleMobileSidebar}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] tracking-[0.12em] uppercase font-semibold bg-[#1C1B18] text-[#FAF8F5] rounded-xs"
+                aria-label="Open Workspace Sidebar"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h16" />
+                </svg>
+                {/* <span>Workspace</span> */}
+              </button>
+            )}
+
+            {/* <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-[#1C1B18] p-2 focus:outline-none"
               aria-label="Toggle Navigation"
@@ -176,16 +226,16 @@ export default function Navbar() {
               <span className="block w-6 h-[1px] bg-[#1C1B18] mb-1.5"></span>
               <span className="block w-6 h-[1px] bg-[#1C1B18] mb-1.5"></span>
               <span className="block w-4 h-[1px] bg-[#1C1B18]"></span>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
+      {/* {mobileMenuOpen && (
         <div className="md:hidden bg-[#FAF8F5] hairline-top px-6 py-6 space-y-4">
           <Link
-            href="/"
+            href="/catalogue"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
           >
@@ -216,19 +266,23 @@ export default function Navbar() {
                 My Requests
               </Link>
               <Link
-                href="/requests/incoming"
+                href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
+                className="block text-[12px] tracking-[0.18em] uppercase font-semibold text-[#8F5338]"
               >
-                Incoming Review
+                Dashboard
               </Link>
-              <Link
-                href="/resources/my-listings"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-[12px] tracking-[0.18em] uppercase font-medium text-[#1C1B18]"
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  toggleMobileSidebar();
+                }}
+                className="w-full flex items-center justify-between py-2.5 px-3 bg-[#F4EFEA] border border-[#E8E3DA] text-[11px] tracking-[0.14em] uppercase font-semibold text-[#1C1B18]"
               >
-                My Inventory
-              </Link>
+                <span>Open Workspace Sidebar</span>
+                <span>→</span>
+              </button>
+
               <Link
                 href="/resources/bulk-import"
                 onClick={() => setMobileMenuOpen(false)}
@@ -243,22 +297,25 @@ export default function Navbar() {
               >
                 List Resource
               </Link>
+
               <div className="pt-4 hairline-top flex items-center justify-between">
                 <div>
                   <div className="text-[13px] font-medium text-[#1C1B18]">{user.name}</div>
-                  <div className="text-[10px] tracking-[0.14em] uppercase text-[#8A8276]">{user.role}</div>
+                  <div className="text-[10px] tracking-[0.14em] uppercase text-[#8A8276]">
+                    {user.departmentName || user.collegeId || user.role}
+                  </div>
                 </div>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     logout();
                   }}
-                  className="text-[11px] tracking-[0.14em] uppercase text-[#8A8276] hover:text-[#1C1B18]"
+                  className="text-[11px] tracking-[0.14em] uppercase text-[#8A8276] hover:text-[#B91C1C]"
                 >
                   Sign Out
                 </button>
               </div>
-            </>
+            </div>
           ) : (
             <div className="pt-2 space-y-3">
               <Link
@@ -278,7 +335,7 @@ export default function Navbar() {
             </div>
           )}
         </div>
-      )}
+      )} */}
     </header>
   );
 }
